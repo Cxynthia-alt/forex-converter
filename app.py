@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect, flash, session, jsonify
-from forex_python.converter import CurrencyCodes, CurrencyRates
+from forex_python.converter import CurrencyCodes, CurrencyRates, RatesNotAvailableError
 from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
@@ -18,14 +18,19 @@ def present_form():
 def convert():
     source_currency = request.form['source-currency']
     target_currency = request.form['target-currency']
+    target_symbol = CurrencyCodes().get_symbol(target_currency)
     amount = int(request.form["amount"])
 
-    if (len(target_currency) != 3 or target_currency is not target_currency.upper()):
-        flash(f"Not a valid code: {target_currency}")
-        return redirect("/")
-    target_symbol = CurrencyCodes().get_symbol(target_currency)
-    convert_amount = CurrencyRates(force_decimal=True).convert(
-        source_currency, target_currency, amount)
+    if CurrencyCodes().get_currency_name(source_currency) is None:
+        flash('source currency not valid', 'error')
+    if CurrencyCodes().get_currency_name(target_currency) is None:
+        flash('target currency not valid', 'error')
+
+    try:
+        convert_amount = f"{CurrencyRates().convert(source_currency, target_currency, amount):.2f}"
+        flash('The result is here', 'success')
+    except RatesNotAvailableError:
+        flash('There\'s no valid rate', 'error')
     # import pdb
     # pdb.set_trace()
-    return render_template("output.html", target_symbol=target_symbol, convert_amount=round(convert_amount, 2))
+    return render_template("output.html", target_symbol=target_symbol, convert_amount=convert_amount)

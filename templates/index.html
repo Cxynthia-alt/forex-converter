@@ -1,33 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="#">
-  <title>Convert Currency</title>
-</head>
+{% extends 'base.html' %}
+{% block title %}Form{% endblock %}
+{% block content %}
 
 <body>
+  <p class="h2">Convert Currency</p>
   <form action="/convert" method="POST">
-    <div>
-      <label for="source-currency">Converting from </label>
+    <div class="mb-3">
+      <label for="source-currency" class="form-label">Converting from </label>
       <input type="text" id="source-currency" name="source-currency">
     </div>
-    <div>
-      <label for="target-currency">Converting to </label>
+    <div class="mb-3">
+      <label for="target-currency" class="form-label">Converting to </label>
       <input type="text" id="target-currency" name="target-currency">
     </div>
-    <div>
-      <label for="amount">Amount: </label>
+    <div class="mb-3">
+      <label for="amount" class="form-label">Amount: </label>
       <input type="number" id="amount" name="amount">
     </div>
-    <button id="convertBtn">Convert</button>
+    <button id="convertBtn" class="btn btn-primary">Convert</button>
   </form>
   <section id="result">
 
   </section>
 </body>
 
-</html>
+{% endblock %}
