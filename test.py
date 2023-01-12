@@ -20,12 +20,15 @@ class FlaskTests(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn('<p class="h2">Convert Currency</p>', html)
 
-    # def test_submit(self):
-    #     """test if form works"""
-    #     with app.test_client() as client:
-    #         resp = client.post(
-    #             "/convert", date={'source-currency': 'USD', 'target-currency': 'USD', 'amount': 1})
-    #         html = resp.get_data(as_text=True)
+    def test_submit(self):
+        """test if form works"""
+        with app.test_client() as client:
+            resp = client.post(
+                "/convert", data={'source-currency': 'USD', 'target-currency': 'USD', 'amount': 1})
+            html = resp.get_data(as_text=True)
 
-    #         self.assertEqual(resp.status_code, 200)
-    #         self.assertIn('success', html)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('success', html)
+
+
+# do a unit test:
