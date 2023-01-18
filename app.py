@@ -23,15 +23,14 @@ def convert():
     amount = int(request.form["amount"])
 
     try:
-        if CurrencyCodes().get_currency_name(source_currency) is None:
-            flash('Source currency not valid', 'error')
-            return render_template('index.html')
-        if CurrencyCodes().get_currency_name(target_currency) is None:
-            flash('Target currency not valid', 'error')
-            return render_template('index.html')
-        else:
-            convert_amount = f"{CurrencyConverter.convert(source_currency, target_currency, amount):.2f}"
-            flash(f'The result is {target_symbol} {convert_amount}', 'success')
-            return render_template('index.html')
+        if CurrencyConverter.validate(source_currency) is not True:
+            flash(CurrencyConverter.validate(source_currency), 'error')
+            redirect('/')
+        if type(CurrencyConverter.validate(target_currency)) == 'str':
+            flash(CurrencyConverter.validate(target_currency), 'error')
+            redirect('/')
+        convert_amount = f"{CurrencyConverter.convert(source_currency, target_currency, amount):.2f}"
+        flash(f'The result is {target_symbol} {convert_amount}', 'success')
+        return render_template('index.html')
     except RatesNotAvailableError:
         flash('There\'s no valid rate', 'error')

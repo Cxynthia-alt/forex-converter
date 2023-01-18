@@ -9,3 +9,10 @@ class CurrencyConverter:
     @staticmethod
     def convert(source_currency, target_currency, amount):
         return CurrencyRates().convert(source_currency, target_currency, amount)
+
+    @staticmethod
+    def validate(currency):
+        result = CurrencyCodes().get_currency_name(currency)
+        if result is None:
+            return f"{currency} is not a valid currency"
+        return result
